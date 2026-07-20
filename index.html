@@ -2262,7 +2262,7 @@
             return result.charAt(0).toUpperCase() + result.slice(1) + ' Only';
         }
 
-        // --- Invoice PDF (with red squares moved to LEFT side) ---
+        // --- INVOICE PDF (with additional red boxes top-right and blue boxes bottom-left) ---
         function downloadInvoicePDF(index) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
@@ -2295,18 +2295,18 @@
                 doc.text(settings.address, 105, pageHeight - 17, { align: "center" });
                 const contactLine = `Mobile: ${settings.mobile || 'N/A'} | Email: ${settings.email || 'N/A'} | Website: ${settings.website || 'N/A'}`;
                 doc.text(contactLine, 105, pageHeight - 13, { align: "center" });
-                // red square top LEFT (first) - size reduced 50% (9x9) rotated 90°
+                // RED squares top-left and top-right
                 doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); 
-                doc.rect(6, 6, 9, 9, 'F');
-                // second red square - size reduced 50% (9x9) rotated 90°
-                doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); 
-                doc.rect(1.5, 1.5, 9, 9, 'F');
-                // blue square bottom right (first) - size reduced 50% (9x9) rotated 90°
+                doc.rect(6, 6, 9, 9, 'F'); // top-left
+                doc.rect(195, 6, 9, 9, 'F'); // top-right
+                doc.rect(1.5, 1.5, 9, 9, 'F'); // second top-left
+                doc.rect(199.5, 1.5, 9, 9, 'F'); // second top-right
+                // BLUE squares bottom-left and bottom-right
                 doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); 
-                doc.rect(195, pageHeight - 15, 9, 9, 'F');
-                // second blue square - size reduced 50% (9x9) rotated 90°
-                doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); 
-                doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
+                doc.rect(6, pageHeight - 15, 9, 9, 'F'); // bottom-left
+                doc.rect(195, pageHeight - 15, 9, 9, 'F'); // bottom-right
+                doc.rect(1.5, pageHeight - 19.5, 9, 9, 'F'); // second bottom-left
+                doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F'); // second bottom-right
             };
             addHeaderAndFooter();
             doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(0,0,0); doc.text("To,", 14, currentY); currentY += 5;
@@ -2333,10 +2333,16 @@
                     doc.setDrawColor(204, 0, 0); doc.setLineWidth(0.8); doc.line(14, pageHeight - 22, 196, pageHeight - 22);
                     doc.setFontSize(8); doc.setTextColor(0, 0, 255); doc.setFont("helvetica", "normal"); doc.text(settings.address, 105, pageHeight - 17, { align: "center" });
                     const cl = `Mobile: ${settings.mobile || 'N/A'} | Email: ${settings.email || 'N/A'} | Website: ${settings.website || 'N/A'}`; doc.text(cl, 105, pageHeight - 13, { align: "center" });
-                    doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(6, 6, 9, 9, 'F');
-                    doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(1.5, 1.5, 9, 9, 'F');
-                    doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(195, pageHeight - 15, 9, 9, 'F');
-                    doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
+                    doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); 
+                    doc.rect(6, 6, 9, 9, 'F');
+                    doc.rect(195, 6, 9, 9, 'F');
+                    doc.rect(1.5, 1.5, 9, 9, 'F');
+                    doc.rect(199.5, 1.5, 9, 9, 'F');
+                    doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); 
+                    doc.rect(6, pageHeight - 15, 9, 9, 'F');
+                    doc.rect(195, pageHeight - 15, 9, 9, 'F');
+                    doc.rect(1.5, pageHeight - 19.5, 9, 9, 'F');
+                    doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
                 }
             });
             let finalY = doc.lastAutoTable.finalY + 6; finalY = checkPageBreak(finalY, 30);
@@ -2563,6 +2569,7 @@
 
         function deleteQuotation(i) { if(confirm('Delete?')) { quotations.splice(i, 1); pushToFirebase(); renderSavedQuotations(); }}
 
+        // --- QUOTATION PDF (with additional red boxes top-right and blue boxes bottom-left) ---
         function downloadQuotationPDF(index) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
@@ -2589,10 +2596,18 @@
                 doc.text(settings.address, 105, pageHeight - 17, { align: "center" });
                 const cl = `Mobile: ${settings.mobile || 'N/A'} | Email: ${settings.email || 'N/A'} | Website: ${settings.website || 'N/A'}`;
                 doc.text(cl, 105, pageHeight - 13, { align: "center" });
-                doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(6, 6, 9, 9, 'F');
-                doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(1.5, 1.5, 9, 9, 'F');
-                doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(195, pageHeight - 15, 9, 9, 'F');
-                doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
+                // RED squares top-left and top-right
+                doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); 
+                doc.rect(6, 6, 9, 9, 'F');
+                doc.rect(195, 6, 9, 9, 'F');
+                doc.rect(1.5, 1.5, 9, 9, 'F');
+                doc.rect(199.5, 1.5, 9, 9, 'F');
+                // BLUE squares bottom-left and bottom-right
+                doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); 
+                doc.rect(6, pageHeight - 15, 9, 9, 'F');
+                doc.rect(195, pageHeight - 15, 9, 9, 'F');
+                doc.rect(1.5, pageHeight - 19.5, 9, 9, 'F');
+                doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
             };
             addHeaderAndFooter();
             doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(0,0,0); doc.text("To,", 14, currentY); currentY += 5;
@@ -2618,10 +2633,16 @@
                     doc.setDrawColor(204, 0, 0); doc.setLineWidth(0.8); doc.line(14, pageHeight - 22, 196, pageHeight - 22);
                     doc.setFontSize(8); doc.setTextColor(0, 0, 255); doc.setFont("helvetica", "normal"); doc.text(settings.address, 105, pageHeight - 17, { align: "center" });
                     const clLine = `Mobile: ${settings.mobile || 'N/A'} | Email: ${settings.email || 'N/A'} | Website: ${settings.website || 'N/A'}`; doc.text(clLine, 105, pageHeight - 13, { align: "center" });
-                    doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(6, 6, 9, 9, 'F');
-                    doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(1.5, 1.5, 9, 9, 'F');
-                    doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(195, pageHeight - 15, 9, 9, 'F');
-                    doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
+                    doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); 
+                    doc.rect(6, 6, 9, 9, 'F');
+                    doc.rect(195, 6, 9, 9, 'F');
+                    doc.rect(1.5, 1.5, 9, 9, 'F');
+                    doc.rect(199.5, 1.5, 9, 9, 'F');
+                    doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); 
+                    doc.rect(6, pageHeight - 15, 9, 9, 'F');
+                    doc.rect(195, pageHeight - 15, 9, 9, 'F');
+                    doc.rect(1.5, pageHeight - 19.5, 9, 9, 'F');
+                    doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
                 }
             });
             let finalY = doc.lastAutoTable.finalY + 6; finalY = checkPageBreak(finalY, 30);
@@ -2800,6 +2821,7 @@
 
         function deleteDelivery(i) { if(confirm('Delete?')) { deliveries.splice(i, 1); pushToFirebase(); renderSavedDeliveries(); }}
 
+        // --- DELIVERY PDF (with additional red boxes top-right and blue boxes bottom-left) ---
         function downloadDeliveryPDF(index) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
@@ -2826,10 +2848,16 @@
                 doc.text(settings.address, 105, pageHeight - 17, { align: "center" });
                 const clLine = `Mobile: ${settings.mobile || 'N/A'} | Email: ${settings.email || 'N/A'} | Website: ${settings.website || 'N/A'}`;
                 doc.text(clLine, 105, pageHeight - 13, { align: "center" });
-                doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(6, 6, 9, 9, 'F');
-                doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(1.5, 1.5, 9, 9, 'F');
-                doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(195, pageHeight - 15, 9, 9, 'F');
-                doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
+                doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); 
+                doc.rect(6, 6, 9, 9, 'F');
+                doc.rect(195, 6, 9, 9, 'F');
+                doc.rect(1.5, 1.5, 9, 9, 'F');
+                doc.rect(199.5, 1.5, 9, 9, 'F');
+                doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); 
+                doc.rect(6, pageHeight - 15, 9, 9, 'F');
+                doc.rect(195, pageHeight - 15, 9, 9, 'F');
+                doc.rect(1.5, pageHeight - 19.5, 9, 9, 'F');
+                doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
             };
             addHeaderAndFooter();
             doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(0,0,0); doc.text("To,", 14, currentY); currentY += 5;
@@ -2854,10 +2882,16 @@
                     doc.setDrawColor(204, 0, 0); doc.setLineWidth(0.8); doc.line(14, pageHeight - 22, 196, pageHeight - 22);
                     doc.setFontSize(8); doc.setTextColor(0, 0, 255); doc.setFont("helvetica", "normal"); doc.text(settings.address, 105, pageHeight - 17, { align: "center" });
                     const clLn = `Mobile: ${settings.mobile || 'N/A'} | Email: ${settings.email || 'N/A'} | Website: ${settings.website || 'N/A'}`; doc.text(clLn, 105, pageHeight - 13, { align: "center" });
-                    doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(6, 6, 9, 9, 'F');
-                    doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(1.5, 1.5, 9, 9, 'F');
-                    doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(195, pageHeight - 15, 9, 9, 'F');
-                    doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
+                    doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); 
+                    doc.rect(6, 6, 9, 9, 'F');
+                    doc.rect(195, 6, 9, 9, 'F');
+                    doc.rect(1.5, 1.5, 9, 9, 'F');
+                    doc.rect(199.5, 1.5, 9, 9, 'F');
+                    doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); 
+                    doc.rect(6, pageHeight - 15, 9, 9, 'F');
+                    doc.rect(195, pageHeight - 15, 9, 9, 'F');
+                    doc.rect(1.5, pageHeight - 19.5, 9, 9, 'F');
+                    doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
                 }
             });
             let finalY = doc.lastAutoTable.finalY + 6; finalY = checkPageBreak(finalY, 20);
@@ -3034,6 +3068,7 @@
 
         function deletePurchase(i) { if(confirm('Delete?')) { purchases.splice(i, 1); pushToFirebase(); renderSavedPurchases(); }}
 
+        // --- PURCHASE PDF (with additional red boxes top-right and blue boxes bottom-left) ---
         function downloadPurchasePDF(index) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
@@ -3056,10 +3091,16 @@
                 doc.setDrawColor(204, 0, 0); doc.setLineWidth(0.8); doc.line(14, pageHeight - 22, 196, pageHeight - 22);
                 doc.setFontSize(8); doc.setTextColor(0, 0, 255); doc.setFont("helvetica", "normal"); doc.text(settings.address, 105, pageHeight - 17, { align: "center" });
                 const cl = `Mobile: ${settings.mobile || 'N/A'} | Email: ${settings.email || 'N/A'} | Website: ${settings.website || 'N/A'}`; doc.text(cl, 105, pageHeight - 13, { align: "center" });
-                doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(6, 6, 9, 9, 'F');
-                doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(1.5, 1.5, 9, 9, 'F');
-                doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(195, pageHeight - 15, 9, 9, 'F');
-                doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
+                doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); 
+                doc.rect(6, 6, 9, 9, 'F');
+                doc.rect(195, 6, 9, 9, 'F');
+                doc.rect(1.5, 1.5, 9, 9, 'F');
+                doc.rect(199.5, 1.5, 9, 9, 'F');
+                doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); 
+                doc.rect(6, pageHeight - 15, 9, 9, 'F');
+                doc.rect(195, pageHeight - 15, 9, 9, 'F');
+                doc.rect(1.5, pageHeight - 19.5, 9, 9, 'F');
+                doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
             };
             addHeaderAndFooter();
             doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(0,0,0); doc.text("To,", 14, currentY); currentY += 5;
@@ -3085,10 +3126,16 @@
                     doc.setDrawColor(204, 0, 0); doc.setLineWidth(0.8); doc.line(14, pageHeight - 22, 196, pageHeight - 22);
                     doc.setFontSize(8); doc.setTextColor(0, 0, 255); doc.setFont("helvetica", "normal"); doc.text(settings.address, 105, pageHeight - 17, { align: "center" });
                     const clLn = `Mobile: ${settings.mobile || 'N/A'} | Email: ${settings.email || 'N/A'} | Website: ${settings.website || 'N/A'}`; doc.text(clLn, 105, pageHeight - 13, { align: "center" });
-                    doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(6, 6, 9, 9, 'F');
-                    doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(1.5, 1.5, 9, 9, 'F');
-                    doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(195, pageHeight - 15, 9, 9, 'F');
-                    doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
+                    doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); 
+                    doc.rect(6, 6, 9, 9, 'F');
+                    doc.rect(195, 6, 9, 9, 'F');
+                    doc.rect(1.5, 1.5, 9, 9, 'F');
+                    doc.rect(199.5, 1.5, 9, 9, 'F');
+                    doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); 
+                    doc.rect(6, pageHeight - 15, 9, 9, 'F');
+                    doc.rect(195, pageHeight - 15, 9, 9, 'F');
+                    doc.rect(1.5, pageHeight - 19.5, 9, 9, 'F');
+                    doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
                 }
             });
             let finalY = doc.lastAutoTable.finalY + 6; finalY = checkPageBreak(finalY, 30);
@@ -3227,6 +3274,7 @@
 
         function deleteMoneyReceipt(i) { if(confirm('Delete?')) { moneyReceipts.splice(i, 1); pushToFirebase(); renderSavedMoneyReceipts(); }}
 
+        // --- MONEY RECEIPT PDF (already has red squares left/right and blue boxes bottom left/right - we keep as is) ---
         async function downloadMoneyReceiptPDF(index) {
             const receipt = moneyReceipts[index];
             if (!receipt) return;
@@ -3346,6 +3394,7 @@
 
         function deleteDocument(i) { if(confirm('Delete?')) { documents.splice(i, 1); pushToFirebase(); renderSavedDocuments(); }}
 
+        // --- DOCUMENT PDF (with additional red boxes top-right and blue boxes bottom-left) ---
         function downloadDocumentPDF(index) {
             const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'mm', 'a4');
             const documentData = documents[index]; const footerMargin = 20; const pageHeight = doc.internal.pageSize.height;
@@ -3361,10 +3410,16 @@
                 doc.setDrawColor(204, 0, 0); doc.setLineWidth(0.8); doc.line(14, pageHeight - 22, 196, pageHeight - 22);
                 doc.setFontSize(8); doc.setTextColor(0, 0, 255); doc.setFont("helvetica", "normal"); doc.text(settings.address, 105, pageHeight - 17, { align: "center" });
                 const cl = `Mobile: ${settings.mobile || 'N/A'} | Email: ${settings.email || 'N/A'} | Website: ${settings.website || 'N/A'}`; doc.text(cl, 105, pageHeight - 13, { align: "center" });
-                doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(6, 6, 9, 9, 'F');
-                doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); doc.rect(1.5, 1.5, 9, 9, 'F');
-                doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(195, pageHeight - 15, 9, 9, 'F');
-                doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
+                doc.setDrawColor(255,0,0); doc.setFillColor(255,0,0); 
+                doc.rect(6, 6, 9, 9, 'F');
+                doc.rect(195, 6, 9, 9, 'F');
+                doc.rect(1.5, 1.5, 9, 9, 'F');
+                doc.rect(199.5, 1.5, 9, 9, 'F');
+                doc.setDrawColor(0,0,255); doc.setFillColor(0,0,255); 
+                doc.rect(6, pageHeight - 15, 9, 9, 'F');
+                doc.rect(195, pageHeight - 15, 9, 9, 'F');
+                doc.rect(1.5, pageHeight - 19.5, 9, 9, 'F');
+                doc.rect(199.5, pageHeight - 19.5, 9, 9, 'F');
             };
             addHeaderAndFooter();
             doc.setFontSize(14); doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 255); doc.text(documentData.title, 105, currentY, { align: "center" });
